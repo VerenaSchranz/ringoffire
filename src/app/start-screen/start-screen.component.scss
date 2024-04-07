@@ -18,3 +18,29 @@
         border-radius: 50%;
     }
 }
+
+.start-label-box {
+    position: absolute;
+    left: 0;
+    bottom: 40%;
+    right: 0;
+    justify-content: center;
+    display: flex;
+
+    &-item {
+        background-color: gold;
+        width: 25vw;
+        height: 50px;
+        font-size: 25px;
+        text-align: center;
+        align-self: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 700;
+        &:hover {
+            filter:brightness(1.25);
+        }
+    }
+    
+}
