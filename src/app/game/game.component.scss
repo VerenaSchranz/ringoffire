@@ -8,6 +8,18 @@
   align-items: center;
 }
 
+.player {
+  position:absolute;
+}
+
+.player-container {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  top: 0;
+  right: 0;
+}
+
 .card-stack {
   position: relative;
   img {

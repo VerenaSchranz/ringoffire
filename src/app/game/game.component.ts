@@ -18,9 +18,8 @@ game: Game = new Game();
 
 constructor() { }
 
-/*Hier ist die gemeinte Funktion*/
 getTopPosition(index: number): number {
-  return 100 + (index * 100);
+  return 100 + (index * 180);
 }
 
   ngOnInit() {
