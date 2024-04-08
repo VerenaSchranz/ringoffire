@@ -1,7 +1,15 @@
-<div class="field">
 
-<app-player style="top: 100px"></app-player>
+
+
+
+
+<!-- <app-player *ngFor="let player of game.players; let i = index;" [ngStyle]="{ 'top.px': 100 + (i * 100) }"></app-player> -->
+
+
+<app-player *ngFor="let player of game.players; let i = index" [ngStyle]="{'top.px': 100 + (i * 100)}"></app-player>
+<div class="field">
     <div class="card-stack">
+
         <!-- Card Stack -->
         <img *ngFor="let c of [0,1,2,3]; let i = index;" [ngStyle]="{ 'right.px': i * 5 }"
         src="../../assets/img/card_cover.png">
