@@ -16,7 +16,11 @@ pickCardAnimation = false;
 currentCard: string ='';
 game: Game = new Game();
 
-constructor() {
+constructor() { }
+
+/*Hier ist die gemeinte Funktion*/
+getTopPosition(index: number): number {
+  return 100 + (index * 100);
 }
 
   ngOnInit() {
