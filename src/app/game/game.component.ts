@@ -31,3 +31,4 @@ constructor() {
     this.pickCardAnimation = true;
   }
 }
+
