@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/styles.scss"],
+  "sourcesContent": ["body {\n    margin: 0;\n}"],
+  "mappings": "AAAA,YACI",
+  "names": []
+}
