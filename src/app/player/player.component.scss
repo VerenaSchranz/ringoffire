@@ -1,0 +1,16 @@
+.player {
+    display: flex;
+    color: white;
+    font-size: 30px;
+    align-items: center;
+    position: absolute;
+    left: 40px;
+    top: 40px;
+    gap: 30px;
+    img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+}
