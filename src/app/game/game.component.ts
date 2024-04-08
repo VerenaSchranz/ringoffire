@@ -31,13 +31,13 @@ constructor() {
     if (!this.pickCardAnimation && this.game.stack.length > 0) {
       this.currentCard = this.game.stack.pop()!;
       this.pickCardAnimation = true;
-      this.game.playedCards.push(this.currentCard);
       console.log('New card:', this.currentCard);
       console.log('Game is', this.game);
-
+      
       setTimeout(() => {
+        this.game.playedCards.push(this.currentCard);
         this.pickCardAnimation = false;
-      }, 1500);
+      }, 1000);
     }
   }
 }
