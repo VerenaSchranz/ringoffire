@@ -28,9 +28,13 @@ constructor() {
   }
 
   takeCard() {
-    this.currentCard = this.game.stack.pop();
-    // console.log(this.currentCard);
-    this.pickCardAnimation = true;
+    if(!this.pickCardAnimation) {
+      this.currentCard = this.game.stack.pop();
+      this.pickCardAnimation = true;
+      setTimeout(() => {
+        this.pickCardAnimation = false;
+      }, 1500)
+    }
   }
 }
 
