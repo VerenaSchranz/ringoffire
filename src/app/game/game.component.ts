@@ -10,7 +10,7 @@ import { Game } from '../../models/game';
   styleUrl: './game.component.scss'
 })
 
-export class GameComponent {
+export class GameComponent implements OnInit {
 pickCardAnimation = false;
 game: Game = new Game();
 
