@@ -42,7 +42,7 @@ openDialog(): void {
 }
 
 getTopPosition(index: number): number {
-  return 100 + (index * 180);
+  return 100 + (index * 120);
 }
 
   ngOnInit() {

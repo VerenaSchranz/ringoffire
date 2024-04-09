@@ -9,7 +9,10 @@
 <div class="field">
 <div class="player-container">
 
-  <app-player *ngFor="let player of game.players; let i = index" [player]="player" [style.margin-top.px]="getTopPosition(i)" class="player"></app-player>
+  <app-player *ngFor="let player of game.players; let i = index" 
+  [playerActive]="i == game.currentPlayer"
+  [player]="player"
+   [style.margin-top.px]="getTopPosition(i)" class="player"></app-player>
   </div>
 
     <!-- <app-player *ngFor="let player of game.players; let i = index" [player]="player" [style.top.px]="getTopPosition(i)"></app-player> -->
