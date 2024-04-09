@@ -4,14 +4,26 @@ import { Game } from '../../models/game';
 import { PlayerComponent } from '../player/player.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDividerModule } from '@angular/material/divider';
+import { MatInputModule } from '@angular/material/input';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
+
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [CommonModule, PlayerComponent, MatButtonModule, MatIconModule, MatDividerModule],
+  imports: [
+    CommonModule,
+    PlayerComponent,
+    MatButtonModule,
+    MatInputModule,
+    MatIconModule,
+    DialogAddPlayerComponent,
+    MatDialogModule,
+  ],
   templateUrl: './game.component.html',
-  styleUrl: './game.component.scss'
+  styleUrl: './game.component.scss',
 })
 
 export class GameComponent implements OnInit {
@@ -19,7 +31,18 @@ pickCardAnimation = false;
 currentCard: string ='';
 game: Game = new Game();
 
-constructor() { }
+
+constructor(public dialog: MatDialog) {}
+
+openDialog(): void {
+  const dialogRef = this.dialog.open( DialogAddPlayerComponent );
+
+  dialogRef.afterClosed().subscribe((name: string) => {
+    if (name && name.length >= 0) {
+      this.game.players.push(name);
+    }
+  });
+}
 
 getTopPosition(index: number): number {
   return 100 + (index * 180);
@@ -47,4 +70,7 @@ getTopPosition(index: number): number {
       }, 1000);
     }
   }
+
+/*   openDialog() {
+  } */
 }
