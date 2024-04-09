@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Game } from '../../models/game';
 import { PlayerComponent } from '../player/player.component';
+import { GameInfoComponent } from '../game-info/game-info.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -16,6 +17,7 @@ import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player
   imports: [
     CommonModule,
     PlayerComponent,
+    GameInfoComponent,
     MatButtonModule,
     MatInputModule,
     MatIconModule,
