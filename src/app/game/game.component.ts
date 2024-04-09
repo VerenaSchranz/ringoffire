@@ -62,7 +62,10 @@ getTopPosition(index: number): number {
       this.pickCardAnimation = true;
       console.log('New card:', this.currentCard);
       console.log('Game is', this.game);
-      
+      this.game.currentPlayer++;
+      if (this.game.currentPlayer >= this.game.players.length) {
+        this.game.currentPlayer = 0;
+      }
       setTimeout(() => {
         this.game.playedCards.push(this.currentCard);
         this.pickCardAnimation = false;
