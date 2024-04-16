@@ -34,7 +34,7 @@ currentCard: string ='';
 game: Game = new Game();
 
 
-constructor(public dialog: MatDialog) {}
+constructor(public dialog: MatDialog,) {}
 
 openDialog(): void {
   const dialogRef = this.dialog.open( DialogAddPlayerComponent );
