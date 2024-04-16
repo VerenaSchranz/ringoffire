@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "ringoffire-6ba87": {
+      "hosting": {
+        "ringoffire": [
+          "ringoffire-6ba87"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "ringoffire-6ba87"
+  }
+}
