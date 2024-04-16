@@ -1,30 +1,26 @@
 import { Injectable, OnInit, inject } from '@angular/core';
-import { Firestore, collection, doc } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, doc } from '@angular/fire/firestore';
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
 import { Game } from '../../models/game';
 
 @Injectable({
-  providedIn: 'root'
-
-
-  
+  providedIn: 'root',
 })
-export class FirebaseServiceService {
- game: Game[] = [];
+export class FirebaseService implements OnInit {
+  game: Game[] = [];
 
   firestore: Firestore = inject(Firestore);
 
   constructor() {}
-/*   addDoc() {
-    
-    console.log('FirebaseService addDoc');
-    addDoc(collection(this.firestore, 'games'), { Hallo: 'Welt' });
-  } */
 
+  ngOnInit(): void {
+
+  }
   getGameRef() {
     return collection(this.firestore, 'games');
   }
-  
   getSingleDocRef(colId:string, docId:string) {
-  return doc(collection(this.firestore, colId), docId)
+    return doc(collection(this.firestore, colId), docId);
   }
 }
