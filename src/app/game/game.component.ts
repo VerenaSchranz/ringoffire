@@ -56,9 +56,7 @@ getTopPosition(index: number): number {
 
   newGame() {
     this.game = new Game();
-    console.log(this.game);
-
-    //daten hinzufügen
+    this.firebaseService.addGame(this.game, 'games');
   }
 
   takeCard() {
