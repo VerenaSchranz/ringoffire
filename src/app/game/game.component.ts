@@ -56,7 +56,7 @@ getTopPosition(index: number): number {
 
   newGame() {
     this.game = new Game();
-    this.firebaseService.addGame(this.game, 'games');
+    this.firebaseService.addGame(this.game.toJson(), 'games');
   }
 
   takeCard() {

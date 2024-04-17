@@ -41,20 +41,21 @@ export class FirebaseService implements OnDestroy {
       });
     });
   }
-  async addGame(item: GameComponent, games: 'games') {
-    if (games == 'games') {
-      await addDoc(this.getGamesRef(), item)
-        .catch((err) => {
-          console.error(err);
-        })
-        .then((docRef) => {
-          console.log('Document written with ID: ', docRef);
-        });
-    } else {
-      console.log('hier geht gar nichts')
-    }
+  
+  async addGame(item: any, collectionName: string) {
+    await addDoc(this.getCollectionRef(collectionName), item)
+      .catch((err) => {
+        console.error(err);
+      })
+      .then((docRef) => {
+        console.log('Document written with ID: ', docRef);
+      });
   }
-
+  
+  getCollectionRef(collectionName: string) {
+    return collection(this.firestore, collectionName);
+  }
+  
   getGamesRef() {
     return collection(this.firestore, "games");
   }
