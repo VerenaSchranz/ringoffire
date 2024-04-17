@@ -1,14 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Game } from '../../models/game';
 import { PlayerComponent } from '../player/player.component';
-import { GameInfoComponent } from '../game-info/game-info.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatDialogModule } from '@angular/material/dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { GameInfoComponent } from '../game-info/game-info.component';
+import { Firestore, addDoc, collection } from '@angular/fire/firestore';
+import { FirebaseService } from '../firebase-service/firebase-service';
 
 
 @Component({
@@ -17,24 +18,24 @@ import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player
   imports: [
     CommonModule,
     PlayerComponent,
-    GameInfoComponent,
-    MatButtonModule,
-    MatInputModule,
-    MatIconModule,
     DialogAddPlayerComponent,
+    MatButtonModule,
+    MatIconModule,
     MatDialogModule,
+    GameInfoComponent,
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss',
 })
 
-export class GameComponent implements OnInit {
+export class GameComponent {
+firestore: Firestore = inject(Firestore);
 pickCardAnimation = false;
 currentCard: string ='';
 game: Game = new Game();
 
 
-constructor(public dialog: MatDialog,) {}
+constructor(public dialog: MatDialog, private firebaseService: FirebaseService) {}
 
 openDialog(): void {
   const dialogRef = this.dialog.open( DialogAddPlayerComponent );
@@ -51,11 +52,14 @@ getTopPosition(index: number): number {
 
   ngOnInit() {
     this.newGame();
+    
   }
 
   newGame() {
     this.game = new Game();
     console.log(this.game);
+
+    //daten hinzufügen
   }
 
   takeCard() {

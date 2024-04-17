@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/player/player.component.scss"],
-  "sourcesContent": [".player {\n    display: flex;\n    color: white;\n    background-color: rgb(187, 187, 187);\n\n    border-top-left-radius: 50px;\n    border-bottom-left-radius: 50px;\n    padding: 20px 30px;\n    font-size: 24px;\n    align-items: center;\n    position: absolute;\n    right: 0;\n    gap: 30px;\n\n     &-active {\n      background-color: orange;\n    }\n\n    img {\n        width: 70px;\n        height: 70px;\n        border-radius: 50%;\n        object-fit: cover;\n    }\n}"],
-  "mappings": "AAAA,CAAA,OACI,QAAA,KACA,MAAA,KACA,iBAAA,KAEA,uBAAA,KACA,0BAAA,KANJ,QAOI,KAAA,KACA,UAAA,KACA,YAAA,OACA,SAAA,SACA,MAAA,EACA,IAAA,KAEC,CAAA,cACC,iBAAA,OAGF,CAlBJ,OAkBI,IACI,MAAA,KACA,OAAA,KApBR,cAqBQ,IACA,WAAA",
-  "names": []
-}
