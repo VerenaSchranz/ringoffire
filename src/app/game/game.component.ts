@@ -33,6 +33,7 @@ firestore: Firestore = inject(Firestore);
 pickCardAnimation = false;
 currentCard: string ='';
 game: Game = new Game();
+// id: string;
 
 
 constructor(public dialog: MatDialog, private firebaseService: FirebaseService) {}
