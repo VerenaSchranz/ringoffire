@@ -33,7 +33,6 @@ firestore: Firestore = inject(Firestore);
 pickCardAnimation = false;
 currentCard: string ='';
 game: Game = new Game();
-// id: string;
 
 
 constructor(public dialog: MatDialog, private firebaseService: FirebaseService) {}
@@ -53,7 +52,6 @@ getTopPosition(index: number): number {
 
   ngOnInit() {
     this.newGame();
-    
   }
 
   newGame() {
@@ -79,5 +77,4 @@ getTopPosition(index: number): number {
       }, 1000);
     }
   }
-
 }

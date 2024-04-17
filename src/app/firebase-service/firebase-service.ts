@@ -1,14 +1,14 @@
-import { Injectable, OnInit, inject, OnDestroy } from '@angular/core';
-import { Firestore, collection, addDoc, doc, onSnapshot } from '@angular/fire/firestore';
-import { Game } from '../../models/game';
+import { Injectable, OnDestroy } from '@angular/core';
+import { Firestore, collection, onSnapshot, CollectionReference, QuerySnapshot } from '@angular/fire/firestore';
+import { Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FirebaseService implements OnDestroy {
-  firestore: Firestore;
-  games: any[] = []; 
+  games: any[] = [];
   unsubGame: () => void;
+  firestore: Firestore;
 
   constructor(firestore: Firestore) {
     this.firestore = firestore;
@@ -20,21 +20,14 @@ export class FirebaseService implements OnDestroy {
   }
 
   subscribeToGames() {
-    return onSnapshot(this.getGameRef(), (snapshot) => {
+    const gamesRef: CollectionReference = collection(this.firestore, 'games');
+    return onSnapshot(gamesRef, (snapshot: QuerySnapshot) => {
       this.games = [];
       snapshot.forEach((doc) => {
-        const gameData = doc.data() as Game; // Daten des Spiels aus dem Dokument extrahieren
-        gameData.games = doc.games; // Die ID des Spiels aus dem Dokument extrahieren
-        this.games.push(gameData); // Spiel zur Liste hinzufügen
+        const gameData = doc.data();
+        this.games.push(gameData);
+        console.log(gameData)
       });
     });
-  }
-
-  getGameRef() {
-    return collection(this.firestore, 'games');
-  }
-
-  getSingleDocRef(colId: string, docId: string) {
-    return doc(collection(this.firestore, colId), docId);
   }
 }
