@@ -10,6 +10,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { GameInfoComponent } from '../game-info/game-info.component';
 import { Firestore, addDoc, collection } from '@angular/fire/firestore';
 import { FirebaseService } from '../firebase-service/firebase-service';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -35,7 +36,10 @@ currentCard: string ='';
 game: Game = new Game();
 
 
-constructor(public dialog: MatDialog, private firebaseService: FirebaseService) {}
+constructor(public dialog: MatDialog, 
+  private firebaseService: FirebaseService,
+  private route: ActivatedRoute
+  ) {}
 
 openDialog(): void {
   const dialogRef = this.dialog.open( DialogAddPlayerComponent );
@@ -50,9 +54,27 @@ getTopPosition(index: number): number {
   return 100 + (index * 120);
 }
 
-  ngOnInit() {
-    this.newGame();
-  }
+ngOnInit(): void {
+  this.route.params.subscribe(params => {
+    const gameId = params['id'];
+    if (gameId) {
+      let docRef = this.firebaseService.getSingleDocRef('games', gameId);
+      docRef.then((docSnapshot: any) => {
+        if (docSnapshot.exists()) {
+          const gameData = docSnapshot.data();
+          console.log('Spiel gefunden:', gameData);
+        } else {
+          console.log("Kein Spiel gefunden");
+        }
+      }).catch((error: any) => {
+        console.error("Fehler beim Abrufen des Spiels:", error);
+      });
+    } else {
+      console.log("Keine Spiel-ID gefunden");
+    }
+  });
+}
+
 
   newGame() {
     this.game = new Game();

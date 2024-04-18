@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Injectable, OnDestroy } from "@angular/core";
 import {
   Firestore,
@@ -6,11 +7,8 @@ import {
   CollectionReference,
   QuerySnapshot,
   addDoc,
-  updateDoc,
-  deleteDoc
+  doc
 } from "@angular/fire/firestore";
-import { Subscription } from "rxjs";
-import { GameComponent } from "../game/game.component";
 
 @Injectable({
   providedIn: "root",
@@ -20,7 +18,7 @@ export class FirebaseService implements OnDestroy {
   unsubGame: () => void;
   firestore: Firestore;
 
-  constructor(firestore: Firestore) {
+  constructor(private router: Router, firestore: Firestore) {
     this.firestore = firestore;
     this.unsubGame = this.subscribeToGames();
   }
@@ -28,7 +26,6 @@ export class FirebaseService implements OnDestroy {
   ngOnDestroy(): void {
     this.unsubGame();
   }
-
 
   subscribeToGames() {
     const gamesRef: CollectionReference = collection(this.firestore, "games");
@@ -41,21 +38,29 @@ export class FirebaseService implements OnDestroy {
       });
     });
   }
-  
+
   async addGame(item: any, collectionName: string) {
-    await addDoc(this.getCollectionRef(collectionName), item)
-      .catch((err) => {
-        console.error(err);
-      })
-      .then((docRef) => {
-        console.log('Document written with ID: ', docRef);
-      });
+    try {
+      const docRef = await addDoc(this.getCollectionRef(collectionName), item);
+      console.log('Document written with ID:', docRef.id);
+      this.router.navigate(['game', docRef.id]);
+    } catch (error) {
+      console.error('Error adding document:', error);
+    }
+  }
+  getGameById(colId: string, docId: string) {
+    return this.getSingleDocRef(colId, docId);
   }
   
+  getSingleDocRef(colId: string, docId: string) {
+    return doc(collection(this.firestore, colId), docId);
+  }
+  
+
   getCollectionRef(collectionName: string) {
     return collection(this.firestore, collectionName);
   }
-  
+
   getGamesRef() {
     return collection(this.firestore, "games");
   }
