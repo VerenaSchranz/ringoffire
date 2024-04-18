@@ -59,10 +59,17 @@ ngOnInit(): void {
     const gameId = params['id'];
     if (gameId) {
       let docRef = this.firebaseService.getSingleDocRef('games', gameId);
+      
       docRef.then((docSnapshot: any) => {
         if (docSnapshot.exists()) {
           const gameData = docSnapshot.data();
           console.log('Spiel gefunden:', gameData);
+          this.game.currentPlayer = gameData['currentPlayer'];
+          this.game.playedCards = gameData['playedCards'];
+          this.game.players = gameData['players'];
+          this.game.stack = gameData['stack'];
+          this.game.pickCardAnimation = gameData['pickCardAnimtion'];
+          this.game.currentCard = gameData['currentCard'];
         } else {
           console.log("Kein Spiel gefunden");
         }
@@ -74,6 +81,7 @@ ngOnInit(): void {
     }
   });
 }
+
 
 
   newGame() {
