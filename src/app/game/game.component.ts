@@ -57,27 +57,12 @@ getTopPosition(index: number): number {
 ngOnInit(): void {
   this.route.params.subscribe(params => {
     const gameId = params['id'];
+    // this.firebaseService.addGame(gameId);
+    console.log(this.firebaseService.gameId);
     if (gameId) {
       let docRef = this.firebaseService.getSingleDocRef('games', gameId);
       
-      docRef.then((docSnapshot: any) => {
-        if (docSnapshot.exists()) {
-          const gameData = docSnapshot.data();
-          console.log('Spiel gefunden:', gameData);
-          this.game.currentPlayer = gameData['currentPlayer'];
-          this.game.playedCards = gameData['playedCards'];
-          this.game.players = gameData['players'];
-          this.game.stack = gameData['stack'];
-          this.game.pickCardAnimation = gameData['pickCardAnimtion'];
-          this.game.currentCard = gameData['currentCard'];
-        } else {
-          console.log("Kein Spiel gefunden");
-        }
-      }).catch((error: any) => {
-        console.error("Fehler beim Abrufen des Spiels:", error);
-      });
-    } else {
-      console.log("Keine Spiel-ID gefunden");
+      
     }
   });
 }

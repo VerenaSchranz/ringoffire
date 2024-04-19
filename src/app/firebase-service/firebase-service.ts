@@ -13,11 +13,11 @@ import {
 @Injectable({
   providedIn: "root",
 })
-export class FirebaseService implements OnDestroy {
+export class FirebaseService {
   games: any[] = [];
   unsubGame: () => void;
   firestore: Firestore;
-
+  gameId: string = "";
   constructor(private router: Router, firestore: Firestore) {
     this.firestore = firestore;
     this.unsubGame = this.subscribeToGames();
@@ -26,28 +26,43 @@ export class FirebaseService implements OnDestroy {
   ngOnDestroy(): void {
     this.unsubGame();
   }
-
+  
   subscribeToGames() {
     const gamesRef: CollectionReference = collection(this.firestore, "games");
     return onSnapshot(gamesRef, (snapshot: QuerySnapshot) => {
       this.games = [];
       snapshot.forEach((doc) => {
         const gameData = doc.data();
-        this.games.push(gameData);
+        // this.games.push(gameData);
         console.log(gameData);
       });
     });
   }
 
-  async addGame(item: any, collectionName: string) {
+   async addGame(item: any, collectionName: string) {
     try {
       const docRef = await addDoc(this.getCollectionRef(collectionName), item);
       console.log('Document written with ID:', docRef.id);
-      this.router.navigate(['game', docRef.id]);
-    } catch (error) {
+      // this.router.navigate(['game', docRef.id]);
+      this.gameId = docRef.id;
+    } 
+     catch (error) {
       console.error('Error adding document:', error);
     }
-  }
+  } 
+
+/*   async addGame(item: {}): Promise<string> {
+    return await addDoc(this.getGamesRef(), item)
+      .then((docRef) => {
+        // console.log("Document written with ID: ", docRef.id);
+        return docRef.id;
+      })
+      .catch((err) => {
+        console.log(err);
+        return '';
+      });
+  } */
+
   getGameById(colId: string, docId: string) {
     return this.getSingleDocRef(colId, docId);
   }
