@@ -27,6 +27,7 @@ export class FirebaseService {
     this.unsubGame();
   }
   
+  
   subscribeToGames() {
     const gamesRef: CollectionReference = collection(this.firestore, "games");
     return onSnapshot(gamesRef, (snapshot: QuerySnapshot) => {

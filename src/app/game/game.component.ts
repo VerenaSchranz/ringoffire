@@ -33,7 +33,6 @@ export class GameComponent {
 firestore: Firestore = inject(Firestore);
 game: Game = new Game();
 
-
 constructor(public dialog: MatDialog, 
   private firebaseService: FirebaseService,
   private route: ActivatedRoute
@@ -56,16 +55,17 @@ getTopPosition(index: number): number {
 ngOnInit(): void {
   this.route.params.subscribe(params => {
     const gameId = params['id'];
-    let docRef = this.firebaseService.getSingleDocRef('games', gameId);
-    if (docRef) {
+    const game = this.firebaseService.getSingleDocRef('games', gameId);
+    if (game) {
+      console.log(game)
+      this.game.currentPlayer = this.game['currentPlayer'];
       console.log( "hier ist der spieler",this.game.currentPlayer);
-      this.game.currentPlayer = gameId['currentPlayer'];
-      this.game.playedCards = gameId['playedCards'];
-      this.game.players = gameId['players'];
-      this.game.player_images = gameId['player_images'];
-      this.game.stack = gameId['stack'];
-      this.game.pickCardAnimation = gameId['pickCardAnimation'];
-      this.game.currentCard = gameId['currentCard'];
+      this.game.playedCards = this.game['playedCards'];
+      this.game.players = this.game['players'];
+      this.game.player_images = this.game['player_images'];
+      this.game.stack = this.game['stack'];
+      this.game.pickCardAnimation = this.game['pickCardAnimation'];
+      this.game.currentCard = this.game['currentCard'];
     }
   });
 }
