@@ -32,7 +32,7 @@ import { ActivatedRoute } from '@angular/router';
 export class GameComponent {
 firestore: Firestore = inject(Firestore);
 game: Game = new Game();
-
+gameId!: string;
 constructor(public dialog: MatDialog, 
   private firebaseService: FirebaseService,
   private route: ActivatedRoute
@@ -55,7 +55,7 @@ getTopPosition(index: number): number {
 ngOnInit(): void {
   this.route.params.subscribe(params => {
     const gameId = params['id'];
-    const game = this.firebaseService.getSingleDocRef('games', gameId);
+    const game = this.firebaseService.getSingleDocRef('games', this.gameId);
     if (game) {
       console.log(game)
       this.game.currentPlayer = this.game['currentPlayer'];
