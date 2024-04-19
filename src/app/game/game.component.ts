@@ -69,10 +69,7 @@ ngOnInit(): void {
 
 
 
-  newGame() {
-    this.game = new Game();
-    this.firebaseService.addGame(this.game.toJson(), 'games');
-  }
+
 
   takeCard() {
     if (!this.pickCardAnimation && this.game.stack.length > 0) {
