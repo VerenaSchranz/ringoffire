@@ -31,8 +31,6 @@ import { ActivatedRoute } from '@angular/router';
 
 export class GameComponent {
 firestore: Firestore = inject(Firestore);
-pickCardAnimation = false;
-currentCard: string ='';
 game: Game = new Game();
 
 
@@ -46,6 +44,7 @@ openDialog(): void {
   dialogRef.afterClosed().subscribe((name: string) => {
     if (name && name.length > 0) {
       this.game.players.push(name);
+      // firebase savGame fehlt
     }
   });
 }
@@ -57,33 +56,34 @@ getTopPosition(index: number): number {
 ngOnInit(): void {
   this.route.params.subscribe(params => {
     const gameId = params['id'];
-    // this.firebaseService.addGame(gameId);
-    console.log(this.firebaseService.gameId);
-    if (gameId) {
-      let docRef = this.firebaseService.getSingleDocRef('games', gameId);
-      
-      
+    let docRef = this.firebaseService.getSingleDocRef('games', gameId);
+    if (docRef) {
+      console.log( "hier ist der spieler",this.game.currentPlayer);
+      this.game.currentPlayer = gameId['currentPlayer'];
+      this.game.playedCards = gameId['playedCards'];
+      this.game.players = gameId['players'];
+      this.game.player_images = gameId['player_images'];
+      this.game.stack = gameId['stack'];
+      this.game.pickCardAnimation = gameId['pickCardAnimation'];
+      this.game.currentCard = gameId['currentCard'];
     }
   });
 }
 
 
-
-
-
   takeCard() {
-    if (!this.pickCardAnimation && this.game.stack.length > 0) {
-      this.currentCard = this.game.stack.pop()!;
-      this.pickCardAnimation = true;
-      console.log('New card:', this.currentCard);
+    if (!this.game.pickCardAnimation && this.game.stack.length > 0) {
+      this.game.currentCard = this.game.stack.pop()!;
+      this.game.pickCardAnimation = true;
+      console.log('New card:', this.game.currentCard);
       console.log('Game is', this.game);
       this.game.currentPlayer++;
       if (this.game.currentPlayer >= this.game.players.length) {
         this.game.currentPlayer = 0;
       }
       setTimeout(() => {
-        this.game.playedCards.push(this.currentCard);
-        this.pickCardAnimation = false;
+        this.game.playedCards.push(this.game.currentCard);
+        this.game.pickCardAnimation = false;
       }, 1000);
     }
   }
