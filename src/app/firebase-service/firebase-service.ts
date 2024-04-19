@@ -1,16 +1,24 @@
-import { Injectable, OnInit, inject, OnDestroy } from '@angular/core';
-import { Firestore, collection, addDoc, doc, onSnapshot } from '@angular/fire/firestore';
-import { Game } from '../../models/game';
+import { Router } from '@angular/router';
+import { Injectable, OnDestroy } from "@angular/core";
+import {
+  Firestore,
+  collection,
+  onSnapshot,
+  CollectionReference,
+  QuerySnapshot,
+  addDoc,
+  doc
+} from "@angular/fire/firestore";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
-export class FirebaseService implements OnDestroy {
-  firestore: Firestore;
-  games: any[] = []; 
+export class FirebaseService {
+  games: any[] = [];
   unsubGame: () => void;
-
-  constructor(firestore: Firestore) {
+  firestore: Firestore;
+  gameId: string = "";
+  constructor(private router: Router, firestore: Firestore) {
     this.firestore = firestore;
     this.unsubGame = this.subscribeToGames();
   }
@@ -18,23 +26,47 @@ export class FirebaseService implements OnDestroy {
   ngOnDestroy(): void {
     this.unsubGame();
   }
-
+  
+  
   subscribeToGames() {
-    return onSnapshot(this.getGameRef(), (snapshot) => {
+    const gamesRef: CollectionReference = collection(this.firestore, "games");
+    return onSnapshot(gamesRef, (snapshot: QuerySnapshot) => {
       this.games = [];
       snapshot.forEach((doc) => {
-        const gameData = doc.data() as Game; // Daten des Spiels aus dem Dokument extrahieren
-        gameData.games = doc.games; // Die ID des Spiels aus dem Dokument extrahieren
-        this.games.push(gameData); // Spiel zur Liste hinzufügen
+        const gameData = doc.data();
+        console.log(gameData);
       });
     });
   }
 
-  getGameRef() {
-    return collection(this.firestore, 'games');
-  }
+   async addGame(item: any, collectionName: string) {
+    try {
+      const docRef = await addDoc(this.getCollectionRef(collectionName), item);
+      console.log('Document written with ID:', docRef.id);
+      this.gameId = docRef.id;
+    } 
+     catch (error) {
+      console.error('Error adding document:', error);
+    }
+  } 
 
+
+
+
+  getGameById(colId: string, docId: string) {
+    return this.getSingleDocRef(colId, docId);
+  }
+  
   getSingleDocRef(colId: string, docId: string) {
     return doc(collection(this.firestore, colId), docId);
+  }
+  
+
+  getCollectionRef(collectionName: string) {
+    return collection(this.firestore, collectionName);
+  }
+
+  getGamesRef() {
+    return collection(this.firestore, "games");
   }
 }

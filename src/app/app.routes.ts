@@ -5,6 +5,6 @@ import { StartScreenComponent } from './start-screen/start-screen.component';
 
 export const routes: Routes = [
   { path: '', component: StartScreenComponent },
-  { path: 'game', component: GameComponent },
+  { path: 'game/:id', component: GameComponent }, // Hier wird der Pfad "game/:id" auf die GameComponent gemappt
 
 ];

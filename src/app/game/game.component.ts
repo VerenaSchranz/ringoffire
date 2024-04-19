@@ -10,6 +10,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { GameInfoComponent } from '../game-info/game-info.component';
 import { Firestore, addDoc, collection } from '@angular/fire/firestore';
 import { FirebaseService } from '../firebase-service/firebase-service';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -30,19 +31,19 @@ import { FirebaseService } from '../firebase-service/firebase-service';
 
 export class GameComponent {
 firestore: Firestore = inject(Firestore);
-pickCardAnimation = false;
-currentCard: string ='';
 game: Game = new Game();
-// id: string;
 
-
-constructor(public dialog: MatDialog, private firebaseService: FirebaseService) {}
+constructor(public dialog: MatDialog, 
+  private firebaseService: FirebaseService,
+  private route: ActivatedRoute
+  ) {}
 
 openDialog(): void {
   const dialogRef = this.dialog.open( DialogAddPlayerComponent );
   dialogRef.afterClosed().subscribe((name: string) => {
     if (name && name.length > 0) {
       this.game.players.push(name);
+      // firebase savGame fehlt
     }
   });
 }
@@ -51,33 +52,39 @@ getTopPosition(index: number): number {
   return 100 + (index * 120);
 }
 
-  ngOnInit() {
-    this.newGame();
-    
-  }
+ngOnInit(): void {
+  this.route.params.subscribe(params => {
+    const gameId = params['id'];
+    const game = this.firebaseService.getSingleDocRef('games', gameId);
+    if (game) {
+      console.log(game)
+      this.game.currentPlayer = this.game['currentPlayer'];
+      console.log( "hier ist der spieler",this.game.currentPlayer);
+      this.game.playedCards = this.game['playedCards'];
+      this.game.players = this.game['players'];
+      this.game.player_images = this.game['player_images'];
+      this.game.stack = this.game['stack'];
+      this.game.pickCardAnimation = this.game['pickCardAnimation'];
+      this.game.currentCard = this.game['currentCard'];
+    }
+  });
+}
 
-  newGame() {
-    this.game = new Game();
-    console.log(this.game);
-
-    //daten hinzufügen
-  }
 
   takeCard() {
-    if (!this.pickCardAnimation && this.game.stack.length > 0) {
-      this.currentCard = this.game.stack.pop()!;
-      this.pickCardAnimation = true;
-      console.log('New card:', this.currentCard);
+    if (!this.game.pickCardAnimation && this.game.stack.length > 0) {
+      this.game.currentCard = this.game.stack.pop()!;
+      this.game.pickCardAnimation = true;
+      console.log('New card:', this.game.currentCard);
       console.log('Game is', this.game);
       this.game.currentPlayer++;
       if (this.game.currentPlayer >= this.game.players.length) {
         this.game.currentPlayer = 0;
       }
       setTimeout(() => {
-        this.game.playedCards.push(this.currentCard);
-        this.pickCardAnimation = false;
+        this.game.playedCards.push(this.game.currentCard);
+        this.game.pickCardAnimation = false;
       }, 1000);
     }
   }
-
 }
