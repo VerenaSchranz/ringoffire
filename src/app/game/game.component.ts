@@ -8,7 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { GameInfoComponent } from '../game-info/game-info.component';
-import { Firestore, addDoc, collection } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, onSnapshot } from '@angular/fire/firestore';
 import { FirebaseService } from '../firebase-service/firebase-service';
 import { ActivatedRoute } from '@angular/router';
 
@@ -32,6 +32,9 @@ import { ActivatedRoute } from '@angular/router';
 export class GameComponent {
 firestore: Firestore = inject(Firestore);
 game: Game = new Game();
+unsubGameDescription: any;
+gameId!: string;
+gameOver = false;
 
 constructor(public dialog: MatDialog, 
   private firebaseService: FirebaseService,
@@ -53,20 +56,28 @@ getTopPosition(index: number): number {
 }
 
 ngOnInit(): void {
-  this.route.params.subscribe(params => {
-    const gameId = params['id'];
-    const game = this.firebaseService.getSingleDocRef('games', gameId);
-    if (game) {
-      console.log(game)
-      this.game.currentPlayer = this.game['currentPlayer'];
-      console.log( "hier ist der spieler",this.game.currentPlayer);
-      this.game.playedCards = this.game['playedCards'];
-      this.game.players = this.game['players'];
-      this.game.player_images = this.game['player_images'];
-      this.game.stack = this.game['stack'];
-      this.game.pickCardAnimation = this.game['pickCardAnimation'];
-      this.game.currentCard = this.game['currentCard'];
-    }
+  this.unsubGameDescription = this.gameDescription();
+}
+
+gameDescription() {
+  this.route.params.subscribe((params) => {
+    this.gameId = params['id'];
+    this.unsubGameDescription = onSnapshot(
+      this.firebaseService.getSingleDocRef('games', this.gameId),
+      (snapshot) => {
+        const game = snapshot.data();
+        if (game) {
+          this.game.currentPlayer = game['currentPlayer'];
+          this.game.playedCards = game['playedCards'];
+          this.game.players = game['players'];
+          console.log(this.game.players)
+          this.game.player_images = game['player_images'];
+          this.game.stack = game['stack'];
+          this.game.pickCardAnimation = game['pickCardAnimation'];
+          this.game.currentCard = game['currentCard'];
+        }
+      }
+    );
   });
 }
 
