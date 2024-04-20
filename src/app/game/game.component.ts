@@ -64,8 +64,9 @@ gameDescription() {
     this.gameId = params['id'];
     this.unsubGameDescription = onSnapshot(
       this.firebaseService.getSingleDocRef('games', this.gameId),
-      (snapshot) => {
-        const game = snapshot.data();
+      (GameData) => {
+        let game = GameData.data();
+        console.log(game)
         if (game) {
           this.game.currentPlayer = game['currentPlayer'];
           this.game.playedCards = game['playedCards'];
@@ -81,6 +82,11 @@ gameDescription() {
   });
 }
 
+ngOnDestroy() {
+  if (this.unsubGameDescription) {
+    this.unsubGameDescription.unsubscribe();
+  }
+}
 
   takeCard() {
     if (!this.game.pickCardAnimation && this.game.stack.length > 0) {
@@ -95,6 +101,7 @@ gameDescription() {
       setTimeout(() => {
         this.game.playedCards.push(this.game.currentCard);
         this.game.pickCardAnimation = false;
+        this.firebaseService.saveGame(this.game, this.gameId);
       }, 1000);
     }
   }
