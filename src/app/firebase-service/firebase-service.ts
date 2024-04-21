@@ -1,4 +1,4 @@
-import { Router } from '@angular/router';
+import { Router } from "@angular/router";
 import { Injectable, OnDestroy } from "@angular/core";
 import {
   Firestore,
@@ -7,8 +7,11 @@ import {
   CollectionReference,
   QuerySnapshot,
   addDoc,
-  doc
+  doc,
+  updateDoc,
 } from "@angular/fire/firestore";
+import { Game } from "../../models/game";
+import { GameComponent } from "../game/game.component";
 
 @Injectable({
   providedIn: "root",
@@ -18,49 +21,50 @@ export class FirebaseService {
   unsubGame: () => void;
   firestore: Firestore;
   gameId: string = "";
-  constructor(private router: Router, firestore: Firestore) {
+
+  constructor(
+    private router: Router,
+    firestore: Firestore,
+    private GameComponent: GameComponent
+  ) {
     this.firestore = firestore;
     this.unsubGame = this.subscribeToGames();
   }
 
   ngOnDestroy(): void {
-    this.unsubGame();
+    this.GameComponent;
   }
-  
-  
+
   subscribeToGames() {
     const gamesRef: CollectionReference = collection(this.firestore, "games");
     return onSnapshot(gamesRef, (snapshot: QuerySnapshot) => {
       this.games = [];
-      snapshot.forEach((doc) => {
-        const gameData = doc.data();
-        console.log(gameData);
-      });
     });
   }
 
-   async addGame(item: any, collectionName: string) {
+  async saveGame(game: any, gameId: string) {
+    try {
+      const gameRef = this.getSingleDocRef("games", gameId);
+      await updateDoc(gameRef, game);
+      console.log("Spiel erfolgreich aktualisiert:", game);
+    } catch (error) {
+      console.error("Fehler beim Speichern des Spiels:", error);
+    }
+  }
+
+  async addGame(item: any, collectionName: string) {
     try {
       const docRef = await addDoc(this.getCollectionRef(collectionName), item);
-      console.log('Document written with ID:', docRef.id);
+      console.log("Document written with ID:", docRef.id);
       this.gameId = docRef.id;
-    } 
-     catch (error) {
-      console.error('Error adding document:', error);
+    } catch (error) {
+      console.error("Error adding document:", error);
     }
-  } 
-
-
-
-
-  getGameById(colId: string, docId: string) {
-    return this.getSingleDocRef(colId, docId);
   }
-  
+
   getSingleDocRef(colId: string, docId: string) {
     return doc(collection(this.firestore, colId), docId);
   }
-  
 
   getCollectionRef(collectionName: string) {
     return collection(this.firestore, collectionName);
